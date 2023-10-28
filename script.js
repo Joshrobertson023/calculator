@@ -12,13 +12,34 @@
 /**********************************************************************/
 /*                            DOM constants                           */
 /**********************************************************************/
+const btnEquals = document.getElementById('='),
+      display = document.getElementById('display'),
+      btnOperators = Array.from(document.querySelectorAll('.operator')),
+      btnNumbers = Array.from(document.querySelectorAll('.num'));
 
 /**********************************************************************/
 /*                          Global variables                          */
 /**********************************************************************/
 let firstNumber = 0,
     secondNumber = 0,
-    operator = '';
+    operator = '',
+    result = 0,
+    array = '',
+    currentValue = 0;
+
+/**********************************************************************/
+/*                            Main progrma                            */
+/**********************************************************************/
+// When any number button is pressed, add to display and array
+btnNumbers.forEach(function(num) {
+   num.addEventListener('click', function() {
+      display.textContent += num.textContent;
+   })
+})
+// When the operator is pressed, add to display and array
+// When the next number button is pressed, add to display and array
+// If array gets another operator, operate on last expression
+// If equals is pressed, operate on last expression
 
 /**********************************************************************/
 /*                      Basic operation functions                     */
@@ -70,4 +91,12 @@ function operate(firstNumber, operator, secondNumber) {
          break;
    }
    return result;
+}
+
+function populateDisplay(value) {
+   display.textContent = value;
+}
+
+function addToArray(value) {
+   array += value;
 }
