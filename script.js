@@ -25,7 +25,6 @@ const MULTIPLE_ERROR = "Only eval one set",
       ERROR = "Error";
 
 let memory = [0, '', 0],
-    operator = '',
     previousResult = 0,
     firstEMPTY = true,
     secondEMPTY = true,
