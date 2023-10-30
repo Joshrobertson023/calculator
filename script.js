@@ -16,67 +16,88 @@ const btnEquals = document.getElementById('='),
       display = document.getElementById('display'),
       btnOperators = Array.from(document.querySelectorAll('.operator')),
       btnNumbers = Array.from(document.querySelectorAll('.num')),
-      btnAC = document.getElementById('ac'),
-      btnC = document.getElementById('c'),
-      btnNegate = document.getElementById('n');
+      btnAC = document.getElementById('ac');
 
 /**********************************************************************/
 /*                          Global variables                          */
 /**********************************************************************/
-let firstNumber = 0,
-    secondNumber = 0,
-    result = 0,
-    memory = '',
-    currentValue = 0,
-    operator = '';
+const MULTIPLE_ERROR = "Only eval one set",
+      ERROR = "Error";
+
+let memory = [0, '', 0],
+    operator = '',
+    previousResult = 0,
+    firstEMPTY = true,
+    secondEMPTY = true,
+    operEMPTY = true;
 
 /**********************************************************************/
 /*                            Main progrma                            */
 /**********************************************************************/
-// When any number button is pressed, add to display and array
-btnNumbers.forEach(function(num) {
-   num.addEventListener('click', function() {
-      display.textContent += num.textContent;
-      memory += num.textContent;
+
+btnNumbers.forEach(function(numBtn) {
+   numBtn.addEventListener('click', () => {
+      if(firstEMPTY) {
+         updateDisplay(numBtn.textContent);
+         memory[0] += numBtn.textContent;
+      }
+      else if(secondEMPTY){
+         updateDisplay(numBtn.textContent);
+         memory[2] += numBtn.textContent;
+      }
+      else {
+         display.textContent = ERROR;
+         clearMem();
+      }
+   })
+})
+
+btnOperators.forEach(function(oper) {
+   oper.addEventListener('click', function() {
+      if(operEMPTY) {
+         firstEMPTY = false;
+         updateDisplay(oper.textContent);
+         memory[1] = oper.textContent;
+         operEMPTY = false;
+      }
+      else {
+         display.textContent = MULTIPLE_ERROR;
+         clearMem();
+      }
    });
 });
-// When the operator is pressed, add to display and array
-btnOperators.forEach(function(op) {
-   op.addEventListener('click', function() {
-      display.textContent += op.textContent;
-      memory += '~' + op.textContent + '~';
-   });
-});
 
-btnEquals.addEventListener('click', function() {
-   let fields = memory.split('~');
-   firstNumber = fields[0];
-   operator = fields[1];
-   secondNumber = fields[2];
-
-   let result = operate(firstNumber, operator, secondNumber);
-   display.textContent = result;
-});
-
-btnAC.addEventListener('click', function() {
+btnAC.addEventListener('click', () => {
    display.textContent = '0';
-   memory = '';
+   clearMem();
 });
 
-btnC.addEventListener('click', function() {
-   display.textContent = '0';
-});
+btnEquals.addEventListener('click', equal);
 
-btnNegate.addEventListener('click', function() {
-   // Add code to negate
-});
-// When the next number button is pressed, add to display and array
-// If array gets another operator, operate on last expression
-// If equals is pressed, operate on last expression
+function equal(btnEquals) {
+   secondEMPTY = false;
+   display.textContent = '';
+   previousResult = operate(memory[0], memory[1], memory[2]);
+   memory = [previousResult, '', 0];
+   secondEMPTY = true;
+   operEMPTY = true;
+   updateDisplay(previousResult);
+}
 
-/**********************************************************************/
-/*                           Operate function                         */
-/**********************************************************************/
+function clearMem() {
+   memory = [0, '', 0];
+   firstEMPTY = true;
+   secondEMPTY = true;
+   operEMPTY = true;
+   operFINISHED = true;
+}
+
+function updateDisplay(value) {
+   if (display.textContent === "0" || display.textContent === MULTIPLE_ERROR || display.textContent === ERROR)
+      display.textContent = "";
+   display.textContent += value;
+}
+
 function operate(firstNumber, operator, secondNumber) {
    switch(operator) {
       case '+':
