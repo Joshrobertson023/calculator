@@ -23,7 +23,7 @@ img {
 
 .calculator {
    height: 400px;
-   width: 250px;
+   width: 275px;
    display: flex;
    align-items: center;
    justify-content: center;
@@ -49,7 +49,7 @@ img {
    font-family: 'IBM Plex Sans', sans-serif;
    font-family: 'Poppins', sans-serif;
    font-family: 'Ubuntu', sans-serif;
-   font-size: 32px;
+   font-size: 28px;
    font-weight: 400;
    border: 3px solid #727272;
    border-style: inset;
